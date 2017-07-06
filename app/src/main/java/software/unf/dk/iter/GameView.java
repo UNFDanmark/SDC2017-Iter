@@ -41,6 +41,10 @@ public class GameView extends SurfaceView implements Runnable {
 
     }
 
+    public void run(){
+
+    }
+
     public void setIcon(String fileName){
         InputStream bitmap = null;
         holder = getHolder();

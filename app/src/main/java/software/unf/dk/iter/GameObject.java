@@ -22,7 +22,7 @@ public class GameObject{
     }
 
     public boolean isColliding(GameObject firstObject, GameObject secondObject){
-        firstObject
+        //firstObject
         return false;
     }
 
