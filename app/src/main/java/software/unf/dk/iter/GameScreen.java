@@ -1,81 +1,124 @@
 package software.unf.dk.iter;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+
 
 /**
  * Created by deltager on 06-07-17.
  */
 
-public class GameScreen extends View implements Drawable.Callback {
+public class GameScreen extends SurfaceView implements SurfaceHolder.Callback{
 
-    float height, width;
     Paint background;
+    GameEngine gameEngine;
+    private Thread gameEngineThread;
+    private MainActivity mainActivity;
+    private Canvas canvas;
 
-    public GameScreen(Context context) {
+
+    public GameScreen(Context context, MainActivity mainActivity) {
         super(context);
-        setup();
-        setWillNotDraw(false);
+        this.mainActivity = mainActivity;
+
+        Log.i("GameScreen", "Constructing GameScreen");
+
+        canvas = new Canvas();
+        Paint paint = new Paint();
+        paint.setColor(Color.RED);
+        canvas.drawText("TEST", 0, 0, paint);
+
+        invalidate();
     }
 
-    public GameScreen(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-        setup();
-    }
+    //public GameScreen(Context context, @Nullable AttributeSet attrs) {
+    //    super(context, attrs);
+    //    setup();
+    //}
 
     public GameScreen(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setup();
     }
 
+    @Override
+    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+
+    }
+
+    @Override
+    public void surfaceCreated(SurfaceHolder surfaceHolder) {
+
+        Log.i("GameScreen", "Creating Surface");
+
+        gameEngine = new GameEngine(this, getHolder());
+        gameEngine.setUp();
+        gameEngineThread = new Thread(gameEngine);
+        gameEngineThread.run();
+
+        setWillNotDraw(false);
+        getHolder().addCallback(this);
+
+        setup();
+
+        Log.i("GameScreen", "Surface Created!");
+
+
+    }
+
     public void setup(){
+        Log.i("GameScreen", "Setting up GameScreen");
         background = new Paint();
         background.setColor(Color.BLACK);
-        Timing timer = new Timing();
-        timer.run();
+
+        mainActivity.setup(gameEngine);
+        Log.i("GameScreen", "GameScreen has been set up");
+
+
+
+
+        //Timing timer = new Timing();
+        //timer.run();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Log.i("Canvas", "drew canvas");
-        height = canvas.getHeight();
-        width = canvas.getWidth();
-        canvas.drawRect(0, 0, width, height, background);
+        Paint p = new Paint();
+        p.setColor(Color.BLACK);
+        canvas.drawText("TEST", 0, 0, p);
+    }
 
-        for(GameObject o : MainActivity.getEngine().getObjects()){
-            canvas.drawBitmap(o.graphic, o.getX(), o.getY(), null);
-            Log.i("The value!", o.getX()+"");
-            Log.i("And the y", o.getY()+"");
-        }
+    @Override
+    public void draw(Canvas canvas) {
+        super.draw(canvas);
 
-        Paint textColor = new Paint();
-        textColor.setColor(Color.RED);
+        Log.i("Canvas", "Drawing...");
 
-
-        canvas.drawText("sup " + System.currentTimeMillis(), 300f, 300f, textColor);
+        Paint p = new Paint();
+        p.setColor(Color.BLACK);
+        canvas.drawText("TEST", 0, 0, p);
 
     }
 
 
 
-    public int getTheHeight(){
-        return getHeight();
-    }
 
-    public int getTheWidth(){
-        return getWidth();
-    }
+
+
+
 
     public class Timing extends Thread {
         @Override
@@ -83,8 +126,6 @@ public class GameScreen extends View implements Drawable.Callback {
 
             //TODO: Add ny timer, kopi af den anden
 
-            //Det er helt op til jer selv om I vil have den til at loope eller om det bare skal være et enkelt delay.
-            //I kan kode lige så mange forskellige timer threads som I har brug for men pas på med at køre for mange samtidigt.
                 try{
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -93,9 +134,6 @@ public class GameScreen extends View implements Drawable.Callback {
 
             System.out.println("Opdaterer");
 
-                //Gør ting efter et delay
-                //I kan IKKE direkte ændre i jeres UI herfra (Sætte tekst i knapper, ændre billeder)
-                //Det I kan gøre er at ændre nogle felt variabler og så kalde postInvalidate() og så have at onDraw() reagerer på de felt variabler.
                 postInvalidate();
 
         /*    long lastTime = System.nanoTime();

@@ -1,29 +1,38 @@
 package software.unf.dk.iter;
 
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 
 import java.util.ArrayList;
 
 /**
  * Created by deltager on 06-07-17.
  */
-public class GameEngine implements Runnable{
+public class GameEngine implements Runnable {
 
     private boolean running;
     private GameScreen gameScreen;
     //TODO: Add objects hertil
     private ArrayList<GameObject> objects = new ArrayList<>();
+    private Paint background;
+    private SurfaceHolder surfaceHolder;
+    private Canvas canvas;
 
-    public GameEngine(GameScreen screen){
+    public GameEngine(GameScreen screen, SurfaceHolder surfaceHolder) {
         gameScreen = screen;
+        this.surfaceHolder = surfaceHolder;
     }
 
-    public void stop(){
+    public void stop() {
         running = false;
     }
 
-    public void setUp(){
+    public void setUp() {
         running = true;
 
     }
@@ -43,7 +52,7 @@ public class GameEngine implements Runnable{
                 tick();
                 delta--;
             }
-            if (running){
+            if (running) {
                 render();
             }
             frames++;
@@ -54,22 +63,68 @@ public class GameEngine implements Runnable{
         }
     }
 
-    private void render(){
+    private void render() {
     }
 
-    private void tick(){
-        for(GameObject o : objects){
+    private void tick() {
+        for (GameObject o : objects) {
             o.tick();
         }
-        gameScreen.setWillNotDraw(false);
-        gameScreen.postInvalidate();
+        drawCanvas();
     }
 
-    public void addObject(GameObject o){
+    int count = 0;
+
+    private void drawCanvas() {
+        background = new Paint();
+        background.setColor(Color.BLACK);
+
+        if (count > 60) {
+            System.out.println("Canvas drawn");
+            count = 0;
+        }
+        count++;
+
+        canvas = null;
+
+        try {
+            canvas = surfaceHolder.lockCanvas();
+            System.out.println(canvas);
+
+
+            synchronized (surfaceHolder) {
+                canvas.drawRect(0, 0, gameScreen.getWidth(), gameScreen.getHeight(), background);
+
+                gameScreen.draw(canvas);
+            }
+        } catch (Exception e) {
+            System.out.println("It happened :O");
+            e.printStackTrace();
+        } finally {
+            if (canvas != null) {
+                try {
+                    surfaceHolder.unlockCanvasAndPost(canvas);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            //Draws all objects on background
+            for (GameObject o : getObjects()) {
+                canvas.drawBitmap(o.graphic, o.getX(), o.getY(), null);
+                //Debug text
+            }
+
+
+            gameScreen.draw(canvas);
+        }
+    }
+
+    public void addObject(GameObject o) {
         objects.add(o);
     }
 
-    public ArrayList<GameObject> getObjects(){
+    public ArrayList<GameObject> getObjects() {
         return objects;
     }
 
