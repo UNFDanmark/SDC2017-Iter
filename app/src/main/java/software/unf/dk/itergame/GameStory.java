@@ -12,8 +12,7 @@ import java.util.ArrayList;
 public class GameStory {
     private ArrayList<String> story;
 
-    @Override
-    public void storyLine {
+    public void setup() {
         story = new ArrayList<>();
         //Beginning og story
         //Prologue
@@ -22,11 +21,13 @@ public class GameStory {
         //Beginning of game and tutorial
         story.add("Protagonist: “it’s surprisingly bright in here”");
         //The protagonist notices a character(The watcher)
+
         story.add("The Watcher: “Greetings young one. I am the watcher of these sacred caverns \nI am the spirit tasked with preparing adventures for their journey");
         story.add("On your journey you can explore, but be ware that as a hero you must interact with your surroundings \nas well as other adventures, and also there will be a point where participating in battle fighting is inevitable");
         story.add("Use the pad in the bottom left corner to move around \nUse the buttons in the bottom right corner to interact and attack \nTry moving towards the dummy and attack it");
         story.add("The Watcher: “Well done, you may now enter the armory and choose your weapon for your journey”");
         //Tutorial ends and the character have to pick their class
+
         story.add("You stand in the room where all the stories you listened to as a child began \nAn armory that predates history itself");
         story.add("Time has however taken it’s toll on this once magnificent room, \nand among what was once a vast numbers of riches and weapons, only three items remain");
         story.add("A sword with its shield, a bow and its arrows and a two-handed axe");
@@ -49,8 +50,10 @@ public class GameStory {
         story.add("MC: So tell me Jarick \n Who are you?");
         story.add("Jarick: Oh me \n Well I am just a hunter looking for bigger prey");
         story.add("MC: What kind of prey are we talking?");
-        story.add("Jarick: Haven't you heard the stories? \nWithin these caverns lies some of the most monstreous beasts ever written about");
+        story.add("Jarick: Haven't you heard the stories? \nWithin these caverns lies some of the most monstrous beasts ever written about");
+    }
 
-
+    public ArrayList<String> getStory(){
+        return story;
     }
 }
