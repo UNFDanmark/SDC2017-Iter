@@ -1,5 +1,7 @@
 package software.unf.dk.iter;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
 /**
@@ -8,17 +10,18 @@ import android.graphics.Canvas;
 
 public class GameObject{
 
-    private Canvas canvas;
     protected int x,y;
+    protected Bitmap graphic;
+    private MainActivity mainActivity;
 
-    public GameObject(int x, int y){
+    public GameObject(int x, int y, MainActivity mainActivity){
         this.x = x;
         this.y = y;
-        canvas = new Canvas();
+        this.mainActivity = mainActivity;
     }
 
-    public void setGraphic(Canvas canvas){
-        this.canvas = canvas;
+    protected void setGraphic(int ref){
+        graphic = BitmapFactory.decodeResource(mainActivity.getResources(), ref);
     }
 
     public boolean isColliding(GameObject firstObject, GameObject secondObject){
@@ -26,4 +29,15 @@ public class GameObject{
         return false;
     }
 
+    public void tick(){
+
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
 }
