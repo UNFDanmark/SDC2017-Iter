@@ -1,4 +1,4 @@
-package software.unf.dk.iter;
+package software.unf.dk.itergame;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package software.unf.dk.iter;
+package software.unf.dk.itergame;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("software.unf.dk.iter", appContext.getPackageName());
+        assertEquals("software.unf.dk.itergame", appContext.getPackageName());
     }
 }
