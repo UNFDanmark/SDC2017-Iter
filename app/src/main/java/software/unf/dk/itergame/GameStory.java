@@ -34,24 +34,39 @@ public class GameStory {
         story.add("You pick the axe");
         //next scene
         //Spilleren går ind ad døren, som åbner sig efter han har valgt et våben. Han går derefterefter hen i ad en gang
-        // Pludselig ser spilleren at der er en anden spiller der er i gang med kombat. Der skal være et choice her hvor spilleren kan vælge mellem at hjælpe, eller ikke at hjælpe.
+        //Pludselig ser spilleren at der er en anden spiller der er i gang med kombat. Der skal være et choice her hvor spilleren kan vælge mellem at hjælpe, eller ikke at hjælpe.
         //Hvis han/hun vælger at hjælpe starter de ud på en bedre fod.
+
         story.add("Main characters thoughts: He looks like he's having troubles with those monsters.");
         story.add("Main characters thoughts: I should probably help him.");
         // Spilleren går hen imod personen og monstrene og begynder at gå i kombat imod dem.
+
         story.add("Thanks stranger, so you're also trying to reach the rank of legends? \nWanna tag along I could use partner ");
         story.add("I guess you could say that, and yeah sure");
         story.add("Well, I am Jarick, let's go be legends");
         //Spilleren og hans nye partner drager videre gennem den næste passage...
         //Der sker ikke noget i et stykke tid og der kan eventurelt være en time skip
-        story.add("Jarick: We have been going around for hours... \n I need to do something soon");
+
+        story.add("Jarick: We have been going around for hours... \nI need to do something soon");
         story.add("Yeah, I suppose I expected more from this cavern");
-        //De følges ad lidt længere...
-        story.add("MC: So tell me Jarick \n Who are you?");
-        story.add("Jarick: Oh me \n Well I am just a hunter looking for bigger prey");
+        //De følges ad lidt længere og man får mere indsigt i hvem Jarick er.
+
+        story.add("MC: So tell me Jarick \nWho are you?");
+        story.add("Jarick: Oh me \nWell I am just a hunter looking for bigger prey");
         story.add("MC: What kind of prey are we talking?");
         story.add("Jarick: Haven't you heard the stories? \nWithin these caverns lies some of the most monstrous beasts ever written about");
-        story.add("MC: ")
+        story.add("MC: Hmmm...\nand you hope to meet these creaturs?");
+        story.add("Jarick: Of couse!\nIt is the greatest way to become a hero");
+        //De når til et rum i stedet for endnu en gang
+        //I rummet er der noget man kan lotte, men Jarick vil gerne hovedpersonen kan vælge at være god eller ond (kan bare lotte men det er i anden version??)
+
+        story.add("Jarick: Nice free things for heros like me! \nLet's get these things and keep going and fight something to hunt");
+        story.add("MC: Well, the  items proberly belongs to someone \n We should'nt just take them");
+        story.add("Jarick: It's all just a part of the cave \nThe people that owns these things proberbly doesn't even exist \n let's just grab these tings and keep going");
+        //Jarick tager tingne og går videre gennem næste dør.
+        //En ny dør åbner i den højre side af rummet, ud af den kommer en grå NPC, en størrere end de andre man har kæmpet mod.
+
+        story.add("");
     }
 
     public ArrayList<String> getStory(){
