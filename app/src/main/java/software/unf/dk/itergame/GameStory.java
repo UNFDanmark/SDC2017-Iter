@@ -51,6 +51,7 @@ public class GameStory {
         story.add("Jarick: Oh me \n Well I am just a hunter looking for bigger prey");
         story.add("MC: What kind of prey are we talking?");
         story.add("Jarick: Haven't you heard the stories? \nWithin these caverns lies some of the most monstrous beasts ever written about");
+        story.add("MC: ")
     }
 
     public ArrayList<String> getStory(){
