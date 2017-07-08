@@ -17,8 +17,15 @@ public class GameObject {
 
     public GameObject(int x, int y, MainActivity mainActivity) {
         this.mainActivity = mainActivity;
+
         this.x = x;
         this.y = y;
+
+        if(this instanceof GameMap){
+            x = mainActivity.getGameCanvas().getWidth()/2;
+            y = mainActivity.getGameCanvas().getHeight()/2;
+        }
+
     }
 
     public int getX() {
@@ -45,12 +52,20 @@ public class GameObject {
 
     }
 
+    public boolean intersects(GameObject object){
+        return false;
+    }
+
     public Bitmap getGraphic() {
         return graphic;
     }
 
     protected void setGraphic(int ref){
         graphic = BitmapFactory.decodeResource(mainActivity.getResources(), ref);
+    }
+
+    protected void scaleGraphic(int width, int height, boolean smooth){
+        graphic = Bitmap.createScaledBitmap(getGraphic(), 700, 700, smooth);
     }
 
     protected MainActivity getMainActivity(){

@@ -18,9 +18,10 @@ public class GamePlayer extends GameObject {
 
     public GamePlayer(int x, int y, MainActivity mainActivity) {
         super(x, y, mainActivity);
-        xVel = 4;
+        xVel = 0;
         yVel = 0;
-        setGraphic(R.mipmap.slav);
+        setGraphic(R.mipmap.gennemsigtig);
+        scaleGraphic(700, 700, false);
     }
 
     @Override
@@ -28,17 +29,15 @@ public class GamePlayer extends GameObject {
         super.tick();
         setX(getX() + xVel);
         setY(getY() + yVel);
-        if(getX() > getMainActivity().getGameCanvas().getWidth() -100){
-            xVel = -4;
-        }
-        if(getX() < 100){
-            xVel = 4;
-        }
     }
 
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        canvas.drawBitmap(getGraphic(), getX(), getY(), null);
+        canvas.drawBitmap(getGraphic(), getX()-getGraphic().getWidth()/2, getY()-getGraphic().getHeight()/2, null);
+    }
+
+    public void setVelocity(int xVel, int yVel){
+
     }
 }

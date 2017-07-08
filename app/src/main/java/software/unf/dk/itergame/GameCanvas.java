@@ -79,6 +79,10 @@ public class GameCanvas extends SurfaceView implements SurfaceHolder.Callback {
     public void draw(Canvas canvas) {
         super.draw(canvas);
 
+        Paint paint = new Paint(Color.WHITE);
+
+        canvas.drawColor(Color.WHITE );
+
         //Entities skal tegne dem selv.
         for(GameObject gameObject : mainActivity.getEntities()){
             gameObject.draw(canvas);

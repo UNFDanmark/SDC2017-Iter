@@ -1,9 +1,13 @@
 package software.unf.dk.itergame;
 
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -11,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
 
     private GameCanvas gameCanvas;
     private ArrayList<GameObject> entities = new ArrayList<>();
+    private MapName current;
+    private Button up;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,31 +28,37 @@ public class MainActivity extends AppCompatActivity {
 
         gameCanvas = new GameCanvas(this, this);
 
-        setContentView(gameCanvas);
+        setContentView(R.layout.activity_main);
+        RelativeLayout view = (RelativeLayout) findViewById(R.id.layout);
+        view.addView(gameCanvas);
 
-        int i = 0;
+        up = (Button) findViewById(R.id.Up);
+        up.bringToFront();
 
-        while(i < 20){
-            int e = 0;
-            while(e < 5) {
-                entities.add(new GamePlayer(200 + (i * 40), 0+(e*50), this));
-                e++;
-            }
+        GameMap entrance = new GameMap(0, 0, this, 61, 113);
 
+        //Når appen starter, begynder man i mappet "entrance"
+        current = MapName.entrance;
 
-            i++;
-        }
-
+        entities.add(new GamePlayer(100, 720 / 2, this));
     }
 
-    public ArrayList<GameObject> getEntities(){
+    public ArrayList<GameObject> getEntities() {
         return entities;
     }
 
-    public GameCanvas getGameCanvas(){
+    public GameCanvas getGameCanvas() {
         return gameCanvas;
     }
 
+    //TODO: Fix
+    public MapName getCurrentGameMap() {
+        return current;
+    }
+
+    public void up(View view){
+        System.out.println("CLICKED");
+    }
 
 
 }
