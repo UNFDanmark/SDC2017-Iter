@@ -12,9 +12,68 @@
         android:id="@+id/Up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
         android:onClick="up"
-        android:text="Button"
-        android:layout_marginBottom="125dp"
+        android:text="Up"
+        android:textSize="36sp"
+        android:layout_above="@+id/Right"
+        android:layout_alignLeft="@+id/Down"
+        android:layout_alignStart="@+id/Down"
+        android:layout_alignRight="@+id/Down"
+        android:layout_alignEnd="@+id/Down" />
+
+    <Button
+        android:id="@+id/Down"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="34dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
+        android:onClick="down"
+        android:text="Down"
+        android:textSize="36sp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_toRightOf="@+id/Left"
+        android:layout_toEndOf="@+id/Left" />
+
+    <Button
+        android:id="@+id/Right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="13dp"
+        android:layout_marginStart="13dp"
+        android:onClick="right"
+        android:text="Right"
+        android:textSize="36sp"
+        android:layout_alignBaseline="@+id/Down"
+        android:layout_alignBottom="@+id/Down"
+        android:layout_toRightOf="@+id/Down"
+        android:layout_toEndOf="@+id/Down" />
+
+    <Button
+        android:id="@+id/Left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/Down"
+        android:layout_alignBottom="@+id/Down"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="53dp"
+        android:layout_marginStart="53dp"
+        android:onClick="left"
+        android:text="Left  "
+        android:textSize="36sp" />
+
+    <Button
+        android:id="@+id/spawn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="22dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="21dp"
+        android:onClick="spawn"
+        android:text="Go to spawn" />
 </RelativeLayout>

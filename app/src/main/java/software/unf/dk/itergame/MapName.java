@@ -6,6 +6,6 @@ package software.unf.dk.itergame;
 
 public enum MapName {
 
-    entrance(), second();
+    entrance(), second()
 
 }

@@ -1,8 +1,8 @@
 package software.unf.dk.itergame;
 
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -15,8 +15,10 @@ public class MainActivity extends AppCompatActivity {
 
     private GameCanvas gameCanvas;
     private ArrayList<GameObject> entities = new ArrayList<>();
-    private MapName current;
-    private Button up;
+    private GameMap current;
+    private Button up, down, left, right;
+    private GameStory gameStory;
+    private GamePlayer gamePlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,17 +32,26 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         RelativeLayout view = (RelativeLayout) findViewById(R.id.layout);
-        view.addView(gameCanvas);
+        view.addView(gameCanvas, 0);
 
+        //Knapper
         up = (Button) findViewById(R.id.Up);
-        up.bringToFront();
+        down = (Button) findViewById(R.id.Down);
+        left = (Button) findViewById(R.id.Left);
+        right = (Button) findViewById(R.id.Right);
+        createListeners();
 
-        GameMap entrance = new GameMap(0, 0, this, 61, 113);
+        GameMap entrance = new GameMap(0, 0, this, 65, 118, MapName.entrance);
+        current = entrance;
+        entities.add(entrance);
+
+        gamePlayer = new GamePlayer(entrance.getSpawnPointX(), entrance.getSpawnPointY(), this);
+        gamePlayer.setGraphic(R.mipmap.ic_launcher);
+        gamePlayer.setSpeed(3);
+        entities.add(gamePlayer);
+        gamePlayer.setLocation(getCurrentGameMap());
 
         //Når appen starter, begynder man i mappet "entrance"
-        current = MapName.entrance;
-
-        entities.add(new GamePlayer(100, 720 / 2, this));
     }
 
     public ArrayList<GameObject> getEntities() {
@@ -52,13 +63,69 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //TODO: Fix
-    public MapName getCurrentGameMap() {
+    public GameMap getCurrentGameMap() {
         return current;
     }
 
-    public void up(View view){
-        System.out.println("CLICKED");
+    public void createListeners(){
+        down.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    gamePlayer.setVelocity(0, 1);
+                    return true;
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP && gamePlayer.getVelX() == 0 && gamePlayer.getVelY() == 1) {
+
+                    gamePlayer.setVelocity(0, 0);
+                    return true;
+                }
+                return true;
+            }
+        });
+        up.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    gamePlayer.setVelocity(0, -1);
+                    return true;
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP && gamePlayer.getVelX() == 0 && gamePlayer.getVelY() == -1) {
+                    gamePlayer.setVelocity(0, 0);
+                    return true;
+                }
+                return true;
+            }
+
+        });
+        left.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    gamePlayer.setVelocity(-1, 0);
+                    return true;
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP && gamePlayer.getVelX() == -1 && gamePlayer.getVelY() == 0) {
+                    gamePlayer.setVelocity(0, 0);
+                    return true;
+                }
+                return true;
+            }
+        });
+
+        right.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    gamePlayer.setVelocity(1, 0);
+                    return true;
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP && gamePlayer.getVelX() == 1 && gamePlayer.getVelY() == 0) {
+                    gamePlayer.setVelocity(0, 0);
+                    return true;
+                }
+                return true;
+            }
+        });
     }
 
-
+    public void spawn(View view){
+        gamePlayer.goToSpawn();
+    }
 }

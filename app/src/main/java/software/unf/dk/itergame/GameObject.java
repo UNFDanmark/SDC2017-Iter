@@ -22,8 +22,8 @@ public class GameObject {
         this.y = y;
 
         if(this instanceof GameMap){
-            x = mainActivity.getGameCanvas().getWidth()/2;
-            y = mainActivity.getGameCanvas().getHeight()/2;
+            this.x = mainActivity.getGameCanvas().getWidth()/2;
+            this.y = mainActivity.getGameCanvas().getHeight()/2;
         }
 
     }
@@ -65,7 +65,12 @@ public class GameObject {
     }
 
     protected void scaleGraphic(int width, int height, boolean smooth){
-        graphic = Bitmap.createScaledBitmap(getGraphic(), 700, 700, smooth);
+        graphic = Bitmap.createScaledBitmap(getGraphic(), width, height, smooth);
+    }
+
+    protected void setLocation(GameMap gameMap){
+        setX(gameMap.getSpawnPointX());
+        setY(gameMap.getSpawnPointY());
     }
 
     protected MainActivity getMainActivity(){

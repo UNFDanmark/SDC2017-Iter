@@ -69,23 +69,39 @@ public class GameCanvas extends SurfaceView implements SurfaceHolder.Callback {
         return super.onTouchEvent(event);
     }
 
+    //Vinderen af bedste variabel navn her
+    private boolean playerHasBeenPutOnSpawnInitially = false;
+
     public void update(){
         for(GameObject gameObject: mainActivity.getEntities()){
-            gameObject.tick();
+            if(!(gameObject instanceof GameMap) && !(gameObject instanceof GamePlayer)){
+                gameObject.tick();
+            }else if(mainActivity.getCurrentGameMap().hasScaled() && gameObject instanceof GamePlayer && playerHasBeenPutOnSpawnInitially == false){
+                GamePlayer player = (GamePlayer) gameObject;
+                player.goToSpawn();
+                playerHasBeenPutOnSpawnInitially = true;
+            }else if(gameObject instanceof GamePlayer){
+                gameObject.tick();
+            }
         }
     }
 
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
+        canvas.drawColor(Color.BLACK);
 
-        Paint paint = new Paint(Color.WHITE);
-
-        canvas.drawColor(Color.WHITE );
+        for(GameObject gameObject: mainActivity.getEntities()){
+            if(gameObject instanceof GameMap){
+                gameObject.draw(canvas);
+            }
+        }
 
         //Entities skal tegne dem selv.
         for(GameObject gameObject : mainActivity.getEntities()){
-            gameObject.draw(canvas);
+            if(!(gameObject instanceof GameMap)) {
+                gameObject.draw(canvas);
+            }
         }
     }
 }
