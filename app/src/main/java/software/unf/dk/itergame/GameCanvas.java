@@ -3,9 +3,6 @@ package software.unf.dk.itergame;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -61,7 +58,6 @@ public class GameCanvas extends SurfaceView implements SurfaceHolder.Callback {
             }
             retry = false;
         }
-
     }
 
     @Override
@@ -70,20 +66,22 @@ public class GameCanvas extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     //Vinderen af bedste variabel navn her
-    private boolean playerHasBeenPutOnSpawnInitially = false;
+    private boolean hasPlayerBeenPutOntoTheCanvasAtTheSpawnPointAtStartOfGameIfNotThenInitiateSpawnPuttingProcess = false;
+    private boolean hasCreatedVeryImportantEntitiesThatAreNecessaryForTheFullExperience = false;
 
     public void update(){
         for(GameObject gameObject: mainActivity.getEntities()){
             if(!(gameObject instanceof GameMap) && !(gameObject instanceof GamePlayer)){
                 gameObject.tick();
-            }else if(mainActivity.getCurrentGameMap().hasScaled() && gameObject instanceof GamePlayer && playerHasBeenPutOnSpawnInitially == false){
+            }else if(mainActivity.getCurrentGameMap().hasScaled() && gameObject instanceof GamePlayer && hasPlayerBeenPutOntoTheCanvasAtTheSpawnPointAtStartOfGameIfNotThenInitiateSpawnPuttingProcess == false){
                 GamePlayer player = (GamePlayer) gameObject;
                 player.goToSpawn();
-                playerHasBeenPutOnSpawnInitially = true;
+                hasPlayerBeenPutOntoTheCanvasAtTheSpawnPointAtStartOfGameIfNotThenInitiateSpawnPuttingProcess = true;
             }else if(gameObject instanceof GamePlayer){
                 gameObject.tick();
             }
         }
+
     }
 
     @Override
@@ -99,9 +97,30 @@ public class GameCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
         //Entities skal tegne dem selv.
         for(GameObject gameObject : mainActivity.getEntities()){
-            if(!(gameObject instanceof GameMap)) {
+            if(!(gameObject instanceof GameMap) && !(gameObject instanceof EnemyProjectile)) {
                 gameObject.draw(canvas);
             }
+        }
+
+        for (GameObject gameObject : mainActivity.getEntities()){
+            if(gameObject instanceof EnemyProjectile){
+                gameObject.draw(canvas);
+            }
+        }
+
+        if(!hasCreatedVeryImportantEntitiesThatAreNecessaryForTheFullExperience){
+            GamePlayer gamePlayer = new GamePlayer(mainActivity.getCurrentGameMap().getSpawnPointX(), mainActivity.getCurrentGameMap().getSpawnPointY(), mainActivity);
+            gamePlayer.setGraphic(R.mipmap.ic_launcher);
+            gamePlayer.setSpeed(mainActivity.getCurrentGameMap().getScale());
+            mainActivity.getEntities().add(gamePlayer);
+            gamePlayer.setLocation(mainActivity.getCurrentGameMap());
+            mainActivity.setGamePlayer(gamePlayer);
+
+            GameMap gameMap = mainActivity.getCurrentGameMap();
+            gameMap.spawnEnemy(gameMap.getGraphic().getWidth()/gameMap.getScale()/2, gameMap.getGraphic().getHeight()/gameMap.getScale()/2);
+
+            hasCreatedVeryImportantEntitiesThatAreNecessaryForTheFullExperience = true;
+
         }
     }
 }

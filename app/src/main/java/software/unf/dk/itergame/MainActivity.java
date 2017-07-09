@@ -1,5 +1,7 @@
 package software.unf.dk.itergame;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -7,6 +9,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
@@ -19,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private Button up, down, left, right;
     private GameStory gameStory;
     private GamePlayer gamePlayer;
+    private ProgressBar healthBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +49,10 @@ public class MainActivity extends AppCompatActivity {
         current = entrance;
         entities.add(entrance);
 
-        gamePlayer = new GamePlayer(entrance.getSpawnPointX(), entrance.getSpawnPointY(), this);
-        gamePlayer.setGraphic(R.mipmap.ic_launcher);
-        gamePlayer.setSpeed(3);
-        entities.add(gamePlayer);
-        gamePlayer.setLocation(getCurrentGameMap());
+        healthBar = (ProgressBar) findViewById(R.id.progressBar);
+        healthBar.setMax(100);
+        healthBar.getProgressDrawable().setColorFilter(
+                Color.RED, android.graphics.PorterDuff.Mode.SRC_IN);
 
         //Når appen starter, begynder man i mappet "entrance"
     }
@@ -127,5 +130,21 @@ public class MainActivity extends AppCompatActivity {
 
     public void spawn(View view){
         gamePlayer.goToSpawn();
+    }
+
+    public GamePlayer getGamePlayer() {
+        return gamePlayer;
+    }
+
+    public void setGamePlayer(GamePlayer gamePlayer) {
+        this.gamePlayer = gamePlayer;
+    }
+
+    public void setHealthText(int health){
+        healthBar.setProgress(health);
+    }
+
+    public void attack(View view){
+        gamePlayer.attack();
     }
 }

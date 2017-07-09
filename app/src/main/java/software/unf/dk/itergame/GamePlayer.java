@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Picture;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.Log;
 
 /**
@@ -19,6 +20,7 @@ public class GamePlayer extends GameObject {
     private int yVel;
     private int speed;
     private int health;
+    private int attackAnimation;
 
     public GamePlayer(int x, int y, MainActivity mainActivity) {
         super(x, y, mainActivity);
@@ -26,6 +28,7 @@ public class GamePlayer extends GameObject {
         yVel = 0;
         speed = 1;
         health = 100;
+        updateHealth();
     }
 
     @Override
@@ -39,6 +42,21 @@ public class GamePlayer extends GameObject {
             setX(newX);
             setY(newY);
         }
+
+        int i = 0;
+        for(GameObject object : getMainActivity().getEntities()){
+            if(object instanceof EnemyProjectile){
+                EnemyProjectile projectile = (EnemyProjectile) object;
+                Rect player = new Rect(getX(), getY(), getX() + 10, getY() + 10);
+                if(projectile.getRekt().intersect(player)) {
+                    getMainActivity().getEntities().remove(i);
+                    setHealth(getHealth() - 1);
+                }
+            }
+            i++;
+        }
+
+
     }
 
     @Override
@@ -51,6 +69,19 @@ public class GamePlayer extends GameObject {
         Rect player = new Rect(getX(), getY(), getX() + 10, getY() + 10);
         canvas.drawRect(player, p);
         //canvas.drawBitmap(getGraphic(), getX(), getY(), null);
+
+        if(attackAnimation > 0){
+
+            int fade = (255) - (((attackAnimation-30)/30)*255);
+            Paint paint = new Paint();
+            paint.setARGB(fade, 255, 255-((attackAnimation-30)*3), 255);
+
+            RectF rectF = new RectF(getX() - (player.width()/2), getY()-(player.height()/2), getX()+20, getY()+20);
+            canvas.drawRect(rectF, paint);
+
+            attackAnimation--;
+        }
+
     }
 
     public void setVelocity(int xVel, int yVel){
@@ -84,5 +115,16 @@ public class GamePlayer extends GameObject {
 
     public void setHealth(int health) {
         this.health = health;
+        updateHealth();
+    }
+
+    public void updateHealth(){
+        getMainActivity().setHealthText(health);
+    }
+
+    public void attack(){
+
+        attackAnimation = 30;
+
     }
 }

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class GameMap extends GameObject{
 
     private ArrayList<MapEntrance> entrances = new ArrayList<>();
-    private int spawnPointX,spawnPointY, scale;
+    private int spawnPointX,spawnPointY, scale, width, height;
     private MapName mapName;
     private boolean scaled;
 
@@ -139,4 +139,12 @@ public class GameMap extends GameObject{
     public boolean hasScaled(){
         return scaled;
     }
+
+    //Get it?
+    public void spawnEnemy(int enemX, int enemY){
+        GameEnemy enemy1 = new GameEnemy(enemX+getOffsetX(), enemY+getOffsetY(), getMainActivity(), 0.2, 3);
+        getMainActivity().getEntities().add(enemy1);
+    }
+
+
 }
