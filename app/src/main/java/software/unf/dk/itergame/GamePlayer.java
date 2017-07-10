@@ -44,8 +44,6 @@ public class GamePlayer extends GameObject {
 
         int i = 0;
 
-
-
         for(GameObject object : getMainActivity().getEntities()){
             if(object instanceof EnemyProjectile){
                 EnemyProjectile projectile = (EnemyProjectile) object;
@@ -137,6 +135,12 @@ public class GamePlayer extends GameObject {
 
     public void setHealth(int health) {
         this.health = health;
+        if(health < 0){
+            this.health = 0;
+        }
+        if (health == 0) {
+            getMainActivity().playerDied();
+        }
         updateHealth();
     }
 

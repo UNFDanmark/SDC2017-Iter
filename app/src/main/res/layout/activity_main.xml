@@ -120,9 +120,9 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="YOU DIED"
+        android:text="you dieded"
         android:textAlignment="center"
-        android:textAllCaps="false"
+        android:textAllCaps="true"
         android:textSize="120sp"
         android:typeface="normal" />
 
@@ -135,7 +135,6 @@
         android:layout_alignRight="@+id/spawn"
         android:layout_alignStart="@+id/spawn"
         android:layout_below="@+id/spawn"
-        android:layout_marginTop="14dp"
-        android:text="TextView" />
+        android:layout_marginTop="14dp" />
 
 </RelativeLayout>

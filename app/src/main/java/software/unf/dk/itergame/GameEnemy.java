@@ -6,6 +6,8 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
 
+import java.util.Random;
+
 /**
  * Created by deltager on 09-07-17.
  */
@@ -21,7 +23,9 @@ public class GameEnemy extends GameObject {
     public GameEnemy(int x, int y, MainActivity mainActivity, double shotsPerSecond, int health) {
         super(x, y, mainActivity);
         this.shotsPerSecond = shotsPerSecond;
-        timeTillShoot = (int) (60/shotsPerSecond);
+        Random r = new Random(System.currentTimeMillis());
+        int i = r.nextInt(200);
+        timeTillShoot = (int) (60/shotsPerSecond) + i;
         this.health = health;
         shotsFired = 9001;
         rect = new Rect(getX(), getY(), getX() + getMainActivity().getCurrentGameMap().getScale()*2, getY() + getMainActivity().getCurrentGameMap().getScale()*2);
@@ -47,7 +51,10 @@ public class GameEnemy extends GameObject {
             this.projectile = projectile;
             projectile.
             getMainActivity().addEntity(projectile);
-            timeTillShoot = (int) (60/shotsPerSecond);
+            Random r = new Random(System.currentTimeMillis());
+            int i = r.nextInt((int) (60/shotsPerSecond));
+
+            timeTillShoot = i;
         }
 
         timeTillShoot--;

@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private GamePlayer gamePlayer;
     private ProgressBar healthBar;
     private TextView squattle, youDied;
+
+
     //Sæt denne til true hvis appen ikke skal virke
     private boolean glitch = false;
 
@@ -207,5 +209,10 @@ public class MainActivity extends AppCompatActivity {
     public void deleteQueue(){
         entities.removeAll(toDelete);
         toDelete.clear();
+    }
+
+    public void playerDied(){
+        enableDiedText();
+        gameCanvas.runDiedScreen(120);
     }
 }

@@ -142,8 +142,8 @@ public class GameMap extends GameObject{
 
     //Get it?
     public void spawnEnemy(int enemX, int enemY){
-        GameEnemy enemy1 = new GameEnemy(enemX+getOffsetX(), enemY+getOffsetY(), getMainActivity(), 0.2, 3);
-        getMainActivity().addEntity(enemy1);
+        GameEnemy enemy = new GameEnemy(enemX+getOffsetX(), enemY+getOffsetY(), getMainActivity(), 0.45, 3);
+        getMainActivity().addEntity(enemy);
     }
 
 

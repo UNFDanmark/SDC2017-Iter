@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -83,6 +84,7 @@ public class GameCanvas extends SurfaceView implements SurfaceHolder.Callback {
                 gameObject.tick();
             } else if (mainActivity.getCurrentGameMap().hasScaled() && gameObject instanceof GamePlayer && hasPlayerBeenPutOntoTheCanvasAtTheSpawnPointAtStartOfGameIfNotThenInitiateSpawnPuttingProcess == false) {
                 GamePlayer player = (GamePlayer) gameObject;
+                mainActivity.setGamePlayer(player);
                 player.goToSpawn();
                 hasPlayerBeenPutOntoTheCanvasAtTheSpawnPointAtStartOfGameIfNotThenInitiateSpawnPuttingProcess = true;
             } else if (gameObject instanceof GamePlayer) {
@@ -95,13 +97,31 @@ public class GameCanvas extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     int bootUp = 120;
+    int deathScreen = 0;
+
+    public void runDiedScreen(int time){
+        deathScreen = time;
+    }
 
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
         canvas.drawColor(Color.BLACK);
 
-        if (bootUp > 0) {
+        if(deathScreen > 0){
+            Log.i("DEATHSCREEN", "death " + deathScreen);
+            deathScreen--;
+
+            mainActivity.getGamePlayer().setHealth(100);
+            mainActivity.getGamePlayer().updateHealth();
+
+            if(deathScreen == 5){
+                mainActivity.disableDiedText();
+            }
+
+            return;
+
+        } else if (bootUp > 0) {
             bootUp--;
             if (bootUp == 5) {
                 mainActivity.removeSquattle();
