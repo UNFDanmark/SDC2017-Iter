@@ -54,26 +54,15 @@ public class EnemyProjectile extends GameObject {
 
         GameMap currentMap = getMainActivity().getCurrentGameMap();
 
-        if(getX() < currentMap.getOffsetX() || getY() < currentMap.getOffsetY()
-                || getX() > (currentMap.getOffsetX() + getMainActivity().getGameCanvas().getWidth()) || getY() > (currentMap.getOffsetY() + getMainActivity().getGameCanvas().getHeight())){
-            if(getMainActivity().getCurrentGameMap().isBlack(getX(), getY())){
-                int i = 0;
-                for(GameObject gameObject : getMainActivity().getEntities()){
-                    if(gameObject == this){
-                        getMainActivity().getEntities().remove(i);
-                    }
-                    i++;
-                }
-            }
+        if(getMainActivity().getCurrentGameMap().isBlack(getX(), getY())){
+            getMainActivity().remove(this);
         }
 
-        if(getMainActivity().getCurrentGameMap().isBlack(getX(), getY())){
-            int i = 0;
-            for(GameObject gameObject : getMainActivity().getEntities()){
-                if(gameObject == this){
-                    getMainActivity().getEntities().remove(i);
-                }
-                i++;
+        else if(getX() < currentMap.getOffsetX() || getY() < currentMap.getOffsetY()
+                || getX() > (currentMap.getOffsetX() + getMainActivity().getGameCanvas().getWidth()) || getY() > (currentMap.getOffsetY() + getMainActivity().getGameCanvas().getHeight())){
+            if(getMainActivity().getCurrentGameMap().isBlack(getX(), getY())){
+                getMainActivity().remove(this);
+
             }
         }
     }

@@ -16,6 +16,7 @@ public class GameEnemy extends GameObject {
     private int health, shotsFired;
     private double shotsPerSecond;
     private Rect rect;
+    private EnemyProjectile projectile;
 
     public GameEnemy(int x, int y, MainActivity mainActivity, double shotsPerSecond, int health) {
         super(x, y, mainActivity);
@@ -41,9 +42,11 @@ public class GameEnemy extends GameObject {
         super.tick();
 
         if(timeTillShoot < 0){
-            EnemyProjectile projectile = new EnemyProjectile(getX()+30, getY()+30, getMainActivity(), 1, getMainActivity().getCurrentGameMap().getScale()*4);
+            EnemyProjectile projectile = new EnemyProjectile(getX()+30, getY()+30, getMainActivity(), getMainActivity().getCurrentGameMap().getScale(), getMainActivity().getCurrentGameMap().getScale()*4);
             projectile.directAtPlayer();
-            getMainActivity().getEntities().add(projectile);
+            this.projectile = projectile;
+            projectile.
+            getMainActivity().addEntity(projectile);
             timeTillShoot = (int) (60/shotsPerSecond);
         }
 

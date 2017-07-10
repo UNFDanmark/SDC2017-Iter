@@ -1,11 +1,8 @@
 package software.unf.dk.itergame;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Picture;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
@@ -21,6 +18,7 @@ public class GamePlayer extends GameObject {
     private int speed;
     private int health;
     private int attackAnimation;
+    private int attackCoolDown;
 
     public GamePlayer(int x, int y, MainActivity mainActivity) {
         super(x, y, mainActivity);
@@ -29,6 +27,7 @@ public class GamePlayer extends GameObject {
         speed = 1;
         health = 100;
         updateHealth();
+        attackCoolDown = 40;
     }
 
     @Override
@@ -44,13 +43,16 @@ public class GamePlayer extends GameObject {
         }
 
         int i = 0;
+
+
+
         for(GameObject object : getMainActivity().getEntities()){
             if(object instanceof EnemyProjectile){
                 EnemyProjectile projectile = (EnemyProjectile) object;
                 Rect player = new Rect(getX(), getY(), getX() + 10, getY() + 10);
                 if(projectile.getRekt().intersect(player)) {
-                    getMainActivity().getEntities().remove(i);
-                    setHealth(getHealth() - 1);
+                    getMainActivity().remove(object);
+                    setHealth(getHealth() - 10);
                 }
             }
             i++;
@@ -61,26 +63,46 @@ public class GamePlayer extends GameObject {
 
     @Override
     public void draw(Canvas canvas) {
+
+        Rect player = new Rect(getX(), getY(), getX() + 10, getY() + 10);
+
+        if(attackAnimation > 0){
+
+            int fadeValue = Math.abs(attackAnimation-30);
+
+            Log.i("fadeValue", "value: " + fadeValue);
+
+            int fade = (255) - (fadeValue/30)*255;
+            Paint paint = new Paint();
+            paint.setARGB(25, 255, 255, 255);
+
+            Rect rect = new Rect(getX() - 5 - (fadeValue/2), getY() - 5 - (fadeValue/2), getX()+5+(fadeValue/2)+(player.width()), getY()+5+(fadeValue/2)+(player.height()));
+            canvas.drawRect(rect, paint);
+
+            for (GameObject object : getMainActivity().getEntities()){
+                if(object instanceof EnemyProjectile){
+                    if (rect.intersect(((EnemyProjectile) object).getRekt())){
+                        getMainActivity().remove(object);
+                    }
+                }
+            }
+
+            attackAnimation -= 3;
+
+        }
+
+        if(attackCoolDown > 0){
+            attackCoolDown--;
+        }
+
         super.draw(canvas);
         Paint p = new Paint();
         p.setColor(Color.CYAN);
         p.setStrokeWidth(10);
 
-        Rect player = new Rect(getX(), getY(), getX() + 10, getY() + 10);
+
         canvas.drawRect(player, p);
         //canvas.drawBitmap(getGraphic(), getX(), getY(), null);
-
-        if(attackAnimation > 0){
-
-            int fade = (255) - (((attackAnimation-30)/30)*255);
-            Paint paint = new Paint();
-            paint.setARGB(fade, 255, 255-((attackAnimation-30)*3), 255);
-
-            RectF rectF = new RectF(getX() - (player.width()/2), getY()-(player.height()/2), getX()+20, getY()+20);
-            canvas.drawRect(rectF, paint);
-
-            attackAnimation--;
-        }
 
     }
 
@@ -124,7 +146,14 @@ public class GamePlayer extends GameObject {
 
     public void attack(){
 
-        attackAnimation = 30;
+        if(attackCoolDown <= 0) {
+            attackAnimation = 30;
+            attackCoolDown = 40;
+        }
 
+    }
+
+    public boolean isOnCoolDown(){
+        return (attackCoolDown <= 0);
     }
 }

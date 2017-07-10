@@ -3,9 +3,13 @@ package software.unf.dk.itergame;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 /**
  * Created by deltager on 07-07-17.
@@ -49,11 +53,11 @@ public class GameCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
         boolean retry = true;
 
-        while(true){
-            try{
+        while (true) {
+            try {
                 thread.setRunning(false);
                 thread.join();
-            }catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             retry = false;
@@ -69,58 +73,77 @@ public class GameCanvas extends SurfaceView implements SurfaceHolder.Callback {
     private boolean hasPlayerBeenPutOntoTheCanvasAtTheSpawnPointAtStartOfGameIfNotThenInitiateSpawnPuttingProcess = false;
     private boolean hasCreatedVeryImportantEntitiesThatAreNecessaryForTheFullExperience = false;
 
-    public void update(){
-        for(GameObject gameObject: mainActivity.getEntities()){
-            if(!(gameObject instanceof GameMap) && !(gameObject instanceof GamePlayer)){
+    public void update() {
+
+        for (GameObject gameObject : mainActivity.getEntities()) {
+
+            if(gameObject instanceof EnemyProjectile){
                 gameObject.tick();
-            }else if(mainActivity.getCurrentGameMap().hasScaled() && gameObject instanceof GamePlayer && hasPlayerBeenPutOntoTheCanvasAtTheSpawnPointAtStartOfGameIfNotThenInitiateSpawnPuttingProcess == false){
+            } else if (!(gameObject instanceof GameMap) && !(gameObject instanceof GamePlayer)) {
+                gameObject.tick();
+            } else if (mainActivity.getCurrentGameMap().hasScaled() && gameObject instanceof GamePlayer && hasPlayerBeenPutOntoTheCanvasAtTheSpawnPointAtStartOfGameIfNotThenInitiateSpawnPuttingProcess == false) {
                 GamePlayer player = (GamePlayer) gameObject;
                 player.goToSpawn();
                 hasPlayerBeenPutOntoTheCanvasAtTheSpawnPointAtStartOfGameIfNotThenInitiateSpawnPuttingProcess = true;
-            }else if(gameObject instanceof GamePlayer){
+            } else if (gameObject instanceof GamePlayer) {
                 gameObject.tick();
             }
-        }
 
+        }
+        mainActivity.deleteQueue();
+        mainActivity.addFromQueue();
     }
+
+    int bootUp = 120;
 
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
         canvas.drawColor(Color.BLACK);
 
-        for(GameObject gameObject: mainActivity.getEntities()){
-            if(gameObject instanceof GameMap){
-                gameObject.draw(canvas);
+        if (bootUp > 0) {
+            bootUp--;
+            if (bootUp == 5) {
+                mainActivity.removeSquattle();
             }
-        }
-
-        //Entities skal tegne dem selv.
-        for(GameObject gameObject : mainActivity.getEntities()){
-            if(!(gameObject instanceof GameMap) && !(gameObject instanceof EnemyProjectile)) {
-                gameObject.draw(canvas);
+        } else {
+            for (GameObject gameObject : mainActivity.getEntities()) {
+                if (gameObject instanceof GameMap) {
+                    gameObject.draw(canvas);
+                }
             }
-        }
 
-        for (GameObject gameObject : mainActivity.getEntities()){
-            if(gameObject instanceof EnemyProjectile){
-                gameObject.draw(canvas);
+            //Entities skal tegne dem selv.
+            for (GameObject gameObject : mainActivity.getEntities()) {
+                if (!(gameObject instanceof GameMap) && !(gameObject instanceof EnemyProjectile)) {
+                    gameObject.draw(canvas);
+                }
             }
-        }
 
-        if(!hasCreatedVeryImportantEntitiesThatAreNecessaryForTheFullExperience){
-            GamePlayer gamePlayer = new GamePlayer(mainActivity.getCurrentGameMap().getSpawnPointX(), mainActivity.getCurrentGameMap().getSpawnPointY(), mainActivity);
-            gamePlayer.setGraphic(R.mipmap.ic_launcher);
-            gamePlayer.setSpeed(mainActivity.getCurrentGameMap().getScale());
-            mainActivity.getEntities().add(gamePlayer);
-            gamePlayer.setLocation(mainActivity.getCurrentGameMap());
-            mainActivity.setGamePlayer(gamePlayer);
+            for (GameObject gameObject : mainActivity.getEntities()) {
+                if (gameObject instanceof EnemyProjectile) {
+                    gameObject.draw(canvas);
+                }
+            }
 
-            GameMap gameMap = mainActivity.getCurrentGameMap();
-            gameMap.spawnEnemy(gameMap.getGraphic().getWidth()/gameMap.getScale()/2, gameMap.getGraphic().getHeight()/gameMap.getScale()/2);
+            if (!hasCreatedVeryImportantEntitiesThatAreNecessaryForTheFullExperience) {
+                GamePlayer gamePlayer = new GamePlayer(mainActivity.getCurrentGameMap().getSpawnPointX(), mainActivity.getCurrentGameMap().getSpawnPointY(), mainActivity);
+                gamePlayer.setGraphic(R.mipmap.ic_launcher);
+                gamePlayer.setSpeed(mainActivity.getCurrentGameMap().getScale());
+                mainActivity.addEntity(gamePlayer);
+                gamePlayer.setLocation(mainActivity.getCurrentGameMap());
+                mainActivity.setGamePlayer(gamePlayer);
 
-            hasCreatedVeryImportantEntitiesThatAreNecessaryForTheFullExperience = true;
+                GameMap gameMap = mainActivity.getCurrentGameMap();
+                gameMap.spawnEnemy(gameMap.getGraphic().getWidth() / gameMap.getScale() / 2, gameMap.getGraphic().getHeight() / gameMap.getScale() / 2);
+                gameMap.spawnEnemy(gameMap.getGraphic().getWidth() - gameMap.getGraphic().getWidth() / gameMap.getScale() / 2, gameMap.getGraphic().getHeight() / gameMap.getScale() / 2);
+                gameMap.spawnEnemy(gameMap.getGraphic().getWidth() / gameMap.getScale() / 2, gameMap.getGraphic().getHeight() - gameMap.getGraphic().getHeight() / gameMap.getScale() / 2);
+                gameMap.spawnEnemy(gameMap.getGraphic().getWidth() - gameMap.getGraphic().getWidth() / gameMap.getScale() / 2, gameMap.getGraphic().getHeight() - gameMap.getGraphic().getHeight() / gameMap.getScale() / 2);
 
+
+                hasCreatedVeryImportantEntitiesThatAreNecessaryForTheFullExperience = true;
+
+            }
         }
     }
 }

@@ -95,27 +95,47 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_alignTop="@+id/spawn"
+        android:layout_toRightOf="@+id/spawn"
+        android:layout_toEndOf="@+id/spawn"
+        android:layout_marginLeft="21dp"
+        android:layout_marginStart="21dp" />
+
+    <TextView
+        android:id="@+id/squattle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="SQUATTLE"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textSize="120sp"
+        android:typeface="normal" />
+
+    <TextView
+        android:id="@+id/youDied"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="YOU DIED"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textSize="120sp"
+        android:typeface="normal" />
+
+    <TextView
+        android:id="@+id/deathCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/spawn"
         android:layout_alignLeft="@+id/spawn"
+        android:layout_alignRight="@+id/spawn"
         android:layout_alignStart="@+id/spawn"
         android:layout_below="@+id/spawn"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="14dp"
+        android:text="TextView" />
 
-    <ProgressBar
-        android:id="@+id/progressBar3"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/progressBar"
-        android:layout_alignStart="@+id/progressBar"
-        android:layout_below="@+id/progressBar"
-        android:layout_marginTop="29dp" />
-
-    <ProgressBar
-        android:id="@+id/progressBar4"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/attack"
-        android:layout_alignRight="@+id/attack"
-        android:layout_alignTop="@+id/spawn" />
 </RelativeLayout>

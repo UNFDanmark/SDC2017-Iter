@@ -4,6 +4,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -11,18 +12,28 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private GameCanvas gameCanvas;
-    private ArrayList<GameObject> entities = new ArrayList<>();
+    private List<GameObject> entities = Collections.synchronizedList(new ArrayList<GameObject>());
+    private List<GameObject> toAdd = new ArrayList<>();
+    private ArrayList<GameObject> toDelete = new ArrayList<>();
+    private ArrayList<Integer> toDeleteIndex = new ArrayList<>();
     private GameMap current;
     private Button up, down, left, right;
     private GameStory gameStory;
     private GamePlayer gamePlayer;
     private ProgressBar healthBar;
+    private TextView squattle, youDied;
+    //Sæt denne til true hvis appen ikke skal virke
+    private boolean glitch = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +65,14 @@ public class MainActivity extends AppCompatActivity {
         healthBar.getProgressDrawable().setColorFilter(
                 Color.RED, android.graphics.PorterDuff.Mode.SRC_IN);
 
+        squattle = (TextView) findViewById(R.id.squattle);
+        youDied = (TextView) findViewById(R.id.youDied);
+        youDied.setWillNotDraw(true);
+
         //Når appen starter, begynder man i mappet "entrance"
     }
 
-    public ArrayList<GameObject> getEntities() {
+    public List<GameObject> getEntities() {
         return entities;
     }
 
@@ -146,5 +161,51 @@ public class MainActivity extends AppCompatActivity {
 
     public void attack(View view){
         gamePlayer.attack();
+    }
+
+    public void remove(GameObject object){
+
+        toDelete.add(object);
+
+        /*Iterator<GameObject> iter = entities.iterator();
+
+
+        while (iter.hasNext()) {
+            GameObject gameObject = iter.next();
+
+            if (object == gameObject) {
+                Log.i("Killed", "" + object);
+                iter.remove();
+            }
+        }*/
+
+    }
+
+    public void removeSquattle(){
+        squattle.setWillNotDraw(true);
+    }
+
+    public void enableDiedText(){
+        youDied.setWillNotDraw(false);
+    }
+
+    public void disableDiedText(){
+        youDied.setWillNotDraw(true);
+    }
+
+    public void addEntity(GameObject o){
+        toAdd.add(o);
+    }
+
+    public void addFromQueue(){
+        entities.addAll(toAdd);
+        if(!glitch) {
+            toAdd.clear();
+        }
+    }
+
+    public void deleteQueue(){
+        entities.removeAll(toDelete);
+        toDelete.clear();
     }
 }
